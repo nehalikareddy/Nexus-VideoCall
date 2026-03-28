@@ -27,13 +27,20 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/meetings", meetingRoutes);
 
 const start = async () => {
+    console.log("Environment check: MONGO_URI is", process.env.MONGO_URI ? "Defined" : "MISSING");
+    console.log("Environment check: GEMINI_API_KEY is", process.env.GEMINI_API_KEY ? "Defined" : "MISSING");
     app.set("mongo_user")
-    const connectionDb = await mongoose.connect(process.env.MONGO_URI, {
-        serverSelectionTimeoutMS: 5000,
-    })
+    let connectionDb;
+    try {
+        connectionDb = await mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 5000,
+        });
+        console.log(`MONGO Connected DB HOst: ${connectionDb.connection.host}`)
+    } catch (err) {
+        console.log("Mongo connection failed; continuing without DB. Error:", err?.message || err);
+    }
 
-    console.log(`MONGO Connected DB HOst: ${connectionDb.connection.host}`)
-    server.listen(app.get("port"), () => {
+    server.listen(app.get("port"), '0.0.0.0', () => {
         console.log("LISTENIN ON PORT 8000")
     });
 
