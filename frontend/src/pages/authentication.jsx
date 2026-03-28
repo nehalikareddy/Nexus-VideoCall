@@ -78,7 +78,7 @@ export default function Authentication() {
                 component="main"
                 sx={{
                     minHeight: '100vh',
-                    backgroundImage: 'url("/public/background.png")',
+                    backgroundImage: 'url("/background.png")',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
