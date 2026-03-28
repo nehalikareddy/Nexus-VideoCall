@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
 import { Meeting } from "../models/meeting.model.js";
-// Using direct REST call to Generative Language API v1 to avoid client version issues.
+import { GoogleGenAI } from "@google/genai";
 
 const summarizeMeeting = async (req, res) => {
   try {
@@ -27,39 +27,17 @@ Transcript:
 ${transcript}
 `;
 
-    const body = {
+    const ai = new GoogleGenAI({ apiKey });
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
       contents: [
         {
           role: "user",
           parts: [{ text: prompt }]
         }
       ]
-    };
-    const urlV1 = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    let resp = await fetch(urlV1, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
     });
-    if (!resp.ok) {
-      const errTextV1 = await resp.text();
-      const urlV1beta = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-      resp = await fetch(urlV1beta, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      if (!resp.ok) {
-        const errTextV1beta = await resp.text();
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-          message: `Failed to summarize: v1 error: ${errTextV1}; v1beta error: ${errTextV1beta}`
-        });
-      }
-    }
-    const json = await resp.json();
-    const text =
-      json?.candidates?.[0]?.content?.parts?.map(p => p.text).join("\n") ||
-      json?.candidates?.[0]?.output || "";
+    const text = response.text || "";
 
     let meeting = await Meeting.findOne({ meetingCode });
     if (!meeting) {

@@ -20,7 +20,7 @@
     "mongoose": "^8.0.3",
     "nodemon": "^3.0.2",
     "socket.io": "^4.7.3",
-    "@google/generative-ai": "^0.28.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "@google/genai": "^1.46.0"
   }
 }
