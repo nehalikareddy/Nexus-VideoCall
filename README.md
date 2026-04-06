@@ -29,6 +29,22 @@
 | **🤖 AI Recaps** | Automatically generate clean markdown summaries of your transcripts using Google Gemini 1.5 Flash. |
 | **📜 History Logs** | Everything is securely saved—review past meeting transcripts and recaps from your dashboard. |
 
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 18** — Component-based UI with hooks
+- **Vite** — Lightning-fast development server
+- **Material UI (MUI) 5** — Pre-built UI components
+- **Socket.IO Client** — Real-time bidirectional communication
+- **WebRTC** — Peer-to-peer video/audio streaming
+- **Web Speech API** — Browser-native speech recognition
+
+### Backend
+- **Node.js + Express** — RESTful API server
+- **Socket.IO** — WebSocket server for signaling
+- **MongoDB + Mongoose** — NoSQL database
+- **Google Gemini AI** — Meeting transcript summarization
+
 ## 🚀 Running Locally
 
 1. **Clone the repository:**
