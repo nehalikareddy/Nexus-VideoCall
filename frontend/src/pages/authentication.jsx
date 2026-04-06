@@ -77,7 +77,7 @@ export default function Authentication() {
                 setName('');
             }
         } catch (err) {
-            setError(err?.response?.data?.message || 'Something went wrong.');
+            setError(err.message || 'Something went wrong.');
         } finally {
             setLoading(false);
         }
