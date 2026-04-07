@@ -224,6 +224,11 @@ export default function VideoMeetComponent() {
         var signal = JSON.parse(message)
 
         if (fromId !== socketIdRef.current) {
+            if (!connections[fromId]) {
+                console.warn("Connection for id not found", fromId);
+                return;
+            }
+
             if (signal.sdp) {
                 connections[fromId].setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(() => {
                     if (signal.sdp.type === 'offer') {
@@ -288,30 +293,28 @@ export default function VideoMeetComponent() {
                     // Wait for their video stream
                     connections[socketListId].ontrack = (event) => {
                         setVideos(videos => {
-                            let stream = event.streams && event.streams[0];
-                            if (!stream) {
-                                stream = new MediaStream();
-                                stream.addTrack(event.track);
-                            }
-                            
                             let videoExists = videos.find(video => video.socketId === socketListId);
                             
                             if (videoExists) {
-                                // Ensure track is present
-                                if (!videoExists.stream.getTracks().includes(event.track)) {
-                                    videoExists.stream.addTrack(event.track);
+                                // Create explicitly NEW stream wrapper so the ref checker fires
+                                let newStream = new MediaStream(videoExists.stream.getTracks());
+                                if (!newStream.getTracks().includes(event.track)) {
+                                    newStream.addTrack(event.track);
                                 }
                                 
                                 const updatedVideos = videos.map(video =>
-                                    video.socketId === socketListId ? { ...video } : video
+                                    video.socketId === socketListId ? { ...video, stream: newStream } : video
                                 );
                                 videoRef.current = updatedVideos;
                                 return updatedVideos;
                             } else {
                                 // Create a new video
+                                let newStream = new MediaStream();
+                                newStream.addTrack(event.track);
+                                
                                 let newVideo = {
                                     socketId: socketListId,
-                                    stream: stream,
+                                    stream: newStream,
                                     autoplay: true,
                                     playsinline: true
                                 };
@@ -808,6 +811,7 @@ export default function VideoMeetComponent() {
                                     ref={ref => {
                                         if (ref && video.stream && ref.srcObject !== video.stream) {
                                             ref.srcObject = video.stream;
+                                            ref.play().catch(e => console.log('Autoplay error:', e));
                                         }
                                     }}
                                     autoPlay
