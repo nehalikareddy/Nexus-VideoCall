@@ -288,13 +288,22 @@ export default function VideoMeetComponent() {
                     // Wait for their video stream
                     connections[socketListId].ontrack = (event) => {
                         setVideos(videos => {
-                            let stream = event.streams[0];
+                            let stream = event.streams && event.streams[0];
+                            if (!stream) {
+                                stream = new MediaStream();
+                                stream.addTrack(event.track);
+                            }
+                            
                             let videoExists = videos.find(video => video.socketId === socketListId);
                             
                             if (videoExists) {
-                                // Update the stream of the existing video
+                                // Ensure track is present
+                                if (!videoExists.stream.getTracks().includes(event.track)) {
+                                    videoExists.stream.addTrack(event.track);
+                                }
+                                
                                 const updatedVideos = videos.map(video =>
-                                    video.socketId === socketListId ? { ...video, stream: stream } : video
+                                    video.socketId === socketListId ? { ...video } : video
                                 );
                                 videoRef.current = updatedVideos;
                                 return updatedVideos;
@@ -797,7 +806,7 @@ export default function VideoMeetComponent() {
                                 <video
                                     data-socket={video.socketId}
                                     ref={ref => {
-                                        if (ref && video.stream) {
+                                        if (ref && video.stream && ref.srcObject !== video.stream) {
                                             ref.srcObject = video.stream;
                                         }
                                     }}
