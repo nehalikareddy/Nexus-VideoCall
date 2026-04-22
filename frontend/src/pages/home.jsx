@@ -65,7 +65,6 @@ function HomeComponent() {
                     <div className="joinBox">
                         <input
                             type="text"
-                            aria-label="Meeting Code"
                             placeholder="Enter meeting code…"
                             value={meetingCode}
                             onChange={e => setMeetingCode(e.target.value)}

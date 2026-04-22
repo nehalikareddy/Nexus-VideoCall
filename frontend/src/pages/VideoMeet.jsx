@@ -688,6 +688,7 @@ export default function VideoMeetComponent() {
                                     placeholder="Message…"
                                     style={{
                                         flex: 1,
+                                        minWidth: 0,
                                         background: 'rgba(255,255,255,0.06)',
                                         border: '1px solid rgba(249,115,22,0.18)',
                                         borderRadius: '9999px',

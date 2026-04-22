@@ -349,6 +349,8 @@
     flex-shrink: 0;
     padding-top: 6px;
     border-top: 1px solid rgba(249,115,22,0.1);
+    min-width: 0;
+    overflow: hidden;
 }
 
 /* ── Captions Overlay ── */
