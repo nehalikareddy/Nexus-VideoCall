@@ -81,9 +81,27 @@ export default function VideoMeetComponent() {
 
     // }
 
+    // Initialize from localStorage on mount
     useEffect(() => {
-        getPermissions();
-    }, [])
+        const savedUsername = localStorage.getItem('nexus_username');
+        const savedMeetingCode = localStorage.getItem('nexus_meeting_code');
+        const currentMeetingCode = window.location.pathname.replace("/", "");
+        
+        // If user has a saved username and is in the same meeting, auto-join
+        if (savedUsername && savedMeetingCode === currentMeetingCode) {
+            setUsername(savedUsername);
+            setAskForUsername(false);
+            // Auto-connect after permissions are granted
+            setTimeout(() => {
+                getPermissions().then(() => {
+                    setAskForUsername(false);
+                    getMedia();
+                });
+            }, 500);
+        } else {
+            getPermissions();
+        }
+    }, []);
 
     let getDislayMedia = () => {
         if (screen) {
@@ -427,6 +445,9 @@ export default function VideoMeetComponent() {
             let tracks = localVideoref.current.srcObject.getTracks()
             tracks.forEach(track => track.stop())
         } catch (e) { }
+        // Clear meeting session from localStorage
+        localStorage.removeItem('nexus_username');
+        localStorage.removeItem('nexus_meeting_code');
         setMeetingEnded(true)
     }
 
@@ -530,6 +551,10 @@ export default function VideoMeetComponent() {
     }
     
     let connect = () => {
+        // Save username and meeting code to localStorage
+        localStorage.setItem('nexus_username', username);
+        localStorage.setItem('nexus_meeting_code', window.location.pathname.replace("/", ""));
+        
         meetingStartRef.current = Date.now();
         setAskForUsername(false);
         getMedia();

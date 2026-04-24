@@ -414,3 +414,152 @@
     border-top: 1px solid rgba(249,115,22,0.08);
     margin-top: 8px;
 }
+
+/* ══════════════════════════════════════════════
+   MOBILE RESPONSIVENESS
+══════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    /* Stack layout vertically on mobile */
+    .conferenceView {
+        margin-right: 0;
+        height: calc(100vh - 140px);
+        flex-direction: column;
+    }
+
+    .conferenceView video,
+    .conferenceViewChatOnly video {
+        width: 90vw;
+        height: auto;
+        max-height: 40vh;
+    }
+
+    .meetUserVideo {
+        width: 120px;
+        height: 160px;
+        bottom: 140px;
+    }
+
+    /* Chat panel repositioned below video on mobile */
+    .chatRoom {
+        position: fixed;
+        right: 0;
+        bottom: 70px;
+        width: 100%;
+        height: 220px;
+        border-left: none;
+        border-top: 1px solid rgba(249,115,22,0.14);
+        border-radius: 20px 20px 0 0;
+        z-index: 8;
+    }
+
+    .chatContainer {
+        padding: 12px 14px 10px;
+        gap: 8px;
+    }
+
+    .chatTitle {
+        font-size: 0.85rem;
+        padding-bottom: 8px;
+    }
+
+    .chattingDisplay {
+        max-height: 100px;
+        gap: 8px;
+    }
+
+    .chatMessage {
+        padding: 7px 9px;
+    }
+
+    .chatSender {
+        font-size: 0.7rem;
+    }
+
+    .chatText {
+        font-size: 0.8rem;
+    }
+
+    .chattingArea {
+        padding-top: 6px;
+    }
+
+    /* Hide transcript on mobile */
+    .transcriptSidebar {
+        display: none;
+    }
+
+    /* Button controls wrap better on mobile */
+    .buttonContainers {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+        min-height: 70px;
+    }
+
+    .iconPill {
+        width: 42px;
+        height: 42px;
+    }
+
+    .textPill {
+        padding: 7px 12px;
+        font-size: 0.75rem;
+    }
+
+    /* Captions more visible on mobile */
+    .captionsOverlay {
+        bottom: 140px;
+        max-width: 85vw;
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .conferenceView {
+        height: calc(100vh - 160px);
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .conferenceView video,
+    .conferenceViewChatOnly video {
+        width: 100%;
+        max-height: 35vh;
+    }
+
+    .meetUserVideo {
+        width: 100px;
+        height: 133px;
+        bottom: 160px;
+        left: 8px;
+    }
+
+    .chatRoom {
+        height: 180px;
+    }
+
+    .chattingDisplay {
+        max-height: 80px;
+    }
+
+    .buttonContainers {
+        min-height: 80px;
+    }
+
+    .iconPill {
+        width: 38px;
+        height: 38px;
+    }
+
+    .iconPillDanger {
+        width: 46px;
+        height: 46px;
+    }
+
+    .textPill {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+}
