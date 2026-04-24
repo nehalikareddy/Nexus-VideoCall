@@ -289,6 +289,22 @@ export default function VideoMeetComponent() {
                 setVideos((videos) => videos.filter((video) => video.socketId !== id))
             })
 
+            socketRef.current.on('video-state-change', ({ videoEnabled, senderId }) => {
+                // When a remote peer changes their video state, trigger renegotiation
+                // This ensures the local side re-initializes the video stream properly
+                if (senderId && connections[senderId]) {
+                    try {
+                        connections[senderId].createOffer().then((description) => {
+                            connections[senderId].setLocalDescription(description)
+                                .then(() => {
+                                    socketRef.current.emit('signal', senderId, JSON.stringify({ 'sdp': connections[senderId].localDescription }))
+                                })
+                                .catch(e => console.log(e))
+                        })
+                    } catch (e) { console.log(e) }
+                }
+            })
+
             socketRef.current.on('user-joined', (id, clients) => {
                 clients.forEach((socketListId) => {
 
@@ -410,6 +426,8 @@ export default function VideoMeetComponent() {
                 window.localStream = onlyAudio;
                 if (localVideoref.current) localVideoref.current.srcObject = onlyAudio;
                 updateMediaSenders();
+                // Notify all peers that video has been disabled
+                socketRef.current.emit('video-state-change', { videoEnabled: false, senderId: socketIdRef.current });
             } catch (e) { console.log(e) }
         } else {
             navigator.mediaDevices.getUserMedia({ video: true, audio: audioAvailable })
@@ -417,6 +435,8 @@ export default function VideoMeetComponent() {
                     window.localStream = s;
                     if (localVideoref.current) localVideoref.current.srcObject = s;
                     updateMediaSenders();
+                    // Notify all peers that video has been enabled
+                    socketRef.current.emit('video-state-change', { videoEnabled: true, senderId: socketIdRef.current });
                 })
                 .catch(e => console.log(e))
         }
