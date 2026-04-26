@@ -48,40 +48,42 @@ Nexus is a full-stack video conferencing application built with the **MERN stack
 ```mermaid
 graph TD
 
-    %% User Layer
-    User((User / Client))
+    %% Users (Top)
+    UserA((User A))
+    UserB((User B))
 
-    %% Frontend
-    subgraph Frontend["Frontend (EJS + CSS)"]
-        UI[UI Pages]
-    end
+    %% P2P Connection
+    UserA <-->|WebRTC P2P| UserB
 
-    %% Backend
-    subgraph Backend["Node.js + Express (MVC)"]
-        Routes[Routes]
-        Controllers[Controllers]
-        Models[Models]
+    %% Backend Layer
+    Server[Node.js Signaling Server]
+
+    %% Users → Server
+    UserA -->|Socket.io Signaling| Server
+    UserB -->|Socket.io Signaling| Server
+
+    %% AI Pipeline
+    subgraph AI_Pipeline["AI Processing"]
+        Gemini[Google Gemini 2.5 Flash]
     end
 
     %% Database
     DB[(MongoDB)]
 
-    %% External Services
-    subgraph Services["External Services"]
-        Mapbox[Mapbox API]
-        Cloudinary[Cloudinary]
+    %% AI Flow
+    Server -->|Transcripts| Gemini
+    Gemini -->|Markdown Recap| Server
+    Server -->|Store| DB
+
+    %% Features
+    subgraph Features["Real-time Features"]
+        Captions[Web Speech API]
+        Socket[Socket.io Events]
     end
 
-    %% Flow
-    User --> UI
-    UI --> Routes
-    Routes --> Controllers
-    Controllers --> Models
-    Models --> DB
-
-    %% External Integrations
-    Controllers --> Mapbox
-    Controllers --> Cloudinary
+    %% Feature Connections
+    UserA -.->|Speech-to-Text| Captions
+    Server -.->|Chat Events| Socket
 ```
 
 ---
