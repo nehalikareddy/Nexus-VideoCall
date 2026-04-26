@@ -32,13 +32,12 @@
 ## 📂 System Architecture
 
 Nexus uses a **Signaling Server** architecture to establish Peer-to-Peer (P2P) connections. Once the handshake is complete, data flows directly between users to minimize latency.
-
 ```mermaid
 graph TD
     UserA((User A)) <-->|Signaling via Socket.io| Server[Node.js Server]
     UserB((User B)) <-->|Signaling via Socket.io| Server
     
-    UserA ==|P2P WebRTC Connection|== UserB
+    UserA <-->|P2P WebRTC Connection| UserB
 
     subgraph AI_Pipeline [AI Processing]
         Server -->|Meeting Transcripts| Gemini[Google Gemini 1.5 Flash]
@@ -51,7 +50,6 @@ graph TD
         Server -.->|Chat/UI Events| Socket[Socket.io]
     end
 ```
-
 ## 🛠️ Technology Stack
 
 ### Frontend
