@@ -35,44 +35,42 @@ Nexus uses a **Signaling Server** architecture to establish Peer-to-Peer (P2P) c
 ```mermaid
 graph LR
 
-    %% Frontend Layer
+    %% Frontend
     subgraph Client [Frontend (Browser)]
-        UserA((User A))
-        UserB((User B))
-        Captions[Web Speech API]
+        A((User A))
+        B((User B))
+        Speech[Web Speech API]
     end
 
-    %% Backend Layer
-    subgraph ServerLayer [Backend (Node.js + Socket.io)]
-        Server[Signaling Server]
-        Socket[Real-time Events]
+    %% Backend
+    subgraph Backend [Node.js Server]
+        S[Signaling Server]
     end
 
-    %% AI Layer
+    %% AI
     subgraph AI [AI Processing]
-        Gemini[Google Gemini API]
+        G[Gemini API]
     end
 
-    %% Database Layer
-    subgraph DBLayer [Database]
-        DB[(MongoDB)]
+    %% Database
+    subgraph DB [Database]
+        M[(MongoDB)]
     end
 
-    %% Connections
-    UserA <-->|WebRTC (P2P)| UserB
-    
-    UserA -->|Signal| Server
-    UserB -->|Signal| Server
+    %% P2P Connection
+    A <-->|WebRTC P2P| B
 
-    Server --> Socket
-    Socket --> UserA
-    Socket --> UserB
+    %% Signaling
+    A -->|Offer/Answer + ICE| S
+    B -->|Offer/Answer + ICE| S
 
-    UserA --> Captions
+    %% Captions
+    A --> Speech
 
-    Server -->|Transcripts| Gemini
-    Gemini -->|Summary| Server
-    Server --> DB
+    %% AI Flow
+    S -->|Transcripts| G
+    G -->|Summary| S
+    S --> M
 ```
 ## 🛠️ Technology Stack
 
