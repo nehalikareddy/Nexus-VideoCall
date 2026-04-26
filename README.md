@@ -1,119 +1,138 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/NEXUS-Video%20Conferencing-2563EB?style=for-the-badge&logoColor=white" alt="NEXUS Badge"/>
-</p>
+# 🎥 Nexus — AI-Integrated Video Conferencing Platform
 
-<h1 align="center">🎥 NEXUS — Video Conferencing Platform</h1>
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=FF4380&height=200&section=header&text=NEXUS&fontSize=90&animation=fadeIn&fontColor=ffffff" />
 
-<p align="center">
-  A full-stack, real-time video conferencing web application built with the <strong>MERN stack</strong> and <strong>WebRTC</strong>. <br/>
-  Connect face-to-face from anywhere — with live chat, screen sharing, live captions, and AI-powered meeting recaps.
-</p>
+  <p align="center">
+    <strong>A high-performance video conferencing solution with real-time AI summarization.</strong>
+  </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/>
-  <img src="https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js"/>
-  <img src="https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB"/>
-  <img src="https://img.shields.io/badge/Socket.IO-4.x-010101?style=flat-square&logo=socketdotio&logoColor=white" alt="Socket.IO"/>
-  <img src="https://img.shields.io/badge/WebRTC-Peer--to--Peer-333333?style=flat-square&logo=webrtc&logoColor=white" alt="WebRTC"/>
-  <img src="https://img.shields.io/badge/Gemini%20AI-1.5%20Flash-4285F4?style=flat-square&logo=google&logoColor=white" alt="Gemini AI"/>
-</p>
+  <p align="center">
+    <a href="https://nexus-videoconference-j11v.onrender.com/" target="_blank">
+      <img src="https://img.shields.io/badge/Live_Demo-FF4380?style=for-the-badge&logo=render&logoColor=white" />
+    </a>
+  </p>
+</div>
 
-## ✨ Highlights
+---
 
-| Feature | Description |
-| :--- | :--- |
-| **🎥 Video Calls** | High-quality, low-latency streaming powered by WebRTC. |
-| **💬 Live Chat** | Real-time messaging seamlessly integrated into the call interface. |
-| **🖥️ Screen Share** | Instantly broadcast your entire screen, window, or specific tab. |
-| **🗣️ Live Captions** | Real-time speech-to-text transcriptions natively rendered in the browser. |
-| **🤖 AI Recaps** | Automatically generate clean markdown summaries of your transcripts using Google Gemini 1.5 Flash. |
-| **📜 History Logs** | Everything is securely saved—review past meeting transcripts and recaps from your dashboard. |
+## 🚀 Overview
+
+Nexus is a full-stack video conferencing application built with the **MERN stack**. It uses **WebRTC** for real-time peer-to-peer communication and integrates **Google Gemini 2.5 Flash** for AI-powered meeting summaries.
+
+---
+
+## ✨ Key Features
+
+* 📹 **P2P Video & Audio** — Low-latency communication using WebRTC
+* 🤖 **AI Summarization** — Automatic meeting recaps using Gemini
+* 💬 **Real-Time Chat** — Instant messaging via Socket.io
+* 📝 **Live Captions** — Speech-to-text using Web Speech API
+* 🖥️ **Screen Sharing** — Share your screen seamlessly
+* 📜 **Meeting History** — Stored in MongoDB
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:** React 18, Tailwind CSS, Material UI, Socket.io-client
+**Backend:** Node.js, Express.js, Socket.io, WebRTC (Simple-Peer)
+**Database:** MongoDB, Mongoose
+**AI:** Google Gemini 2.5 Flash API
+**Deployment:** Render
+
+---
 
 ## 📂 System Architecture
 
-Nexus uses a **Signaling Server** architecture to establish Peer-to-Peer (P2P) connections. Once the handshake is complete, data flows directly between users to minimize latency.
 ```mermaid
 graph TD
 
+    %% User Layer
+    User((User / Client))
+
     %% Frontend
-    subgraph Client["Frontend (Browser)"]
-        A((User A))
-        B((User B))
-        Speech[Web Speech API]
+    subgraph Frontend["Frontend (EJS + CSS)"]
+        UI[UI Pages]
     end
 
     %% Backend
-    subgraph Backend["Node.js Server"]
-        S[Signaling Server]
-    end
-
-    %% AI
-    subgraph AI["AI Processing"]
-        G[Gemini API]
+    subgraph Backend["Node.js + Express (MVC)"]
+        Routes[Routes]
+        Controllers[Controllers]
+        Models[Models]
     end
 
     %% Database
-    subgraph DB["Database"]
-        M[(MongoDB)]
+    DB[(MongoDB)]
+
+    %% External Services
+    subgraph Services["External Services"]
+        Mapbox[Mapbox API]
+        Cloudinary[Cloudinary]
     end
 
-    %% P2P Connection (side connection)
-    A <-->|WebRTC P2P| B
+    %% Flow
+    User --> UI
+    UI --> Routes
+    Routes --> Controllers
+    Controllers --> Models
+    Models --> DB
 
-    %% Flow (top → bottom)
-    A -->|Signal| S
-    B -->|Signal| S
-
-    A --> Speech
-
-    S -->|Transcripts| G
-    G -->|Summary| S
-    S --> M
+    %% External Integrations
+    Controllers --> Mapbox
+    Controllers --> Cloudinary
 ```
-## 🛠️ Technology Stack
 
-### Frontend
-- **React 18** — Component-based UI with hooks
-- **Vite** — Lightning-fast development server
-- **Material UI (MUI) 5** — Pre-built UI components
-- **Socket.IO Client** — Real-time bidirectional communication
-- **WebRTC** — Peer-to-peer video/audio streaming
-- **Web Speech API** — Browser-native speech recognition
+---
 
-### Backend
-- **Node.js + Express** — RESTful API server
-- **Socket.IO** — WebSocket server for signaling
-- **MongoDB + Mongoose** — NoSQL database
-- **Google Gemini AI** — Meeting transcript summarization
+## 🔑 Environment Variables
 
-## 🚀 Running Locally
+Create a `.env` file inside the **server** folder:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/nehalikareddy/Nexus-VideoCall.git
-   cd Nexus-VideoCall
-   ```
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_atlas_url
+GEMINI_API_KEY=your_google_gemini_api_key
+FRONTEND_URL=http://localhost:3000
+```
 
-2. **Start the Backend:**
-   Create a `.env` file in the `backend/` folder containing your `MONGO_URI` and `GEMINI_API_KEY`.
-   ```bash
-   cd backend
-   npm install
-   npm run dev
-   ```
+---
 
-3. **Start the Frontend:**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
+## ⚙️ Installation & Setup
 
-## 🌐 Deployment
+### 1️⃣ Clone Repository
 
-| Platform | Setup Overview | Requirements |
-| :--- | :--- | :--- |
-| **Render** (Backend) | Create a **Web Service**, point it to the `backend` folder. | Provide `MONGO_URI` and `GEMINI_API_KEY` secrets. |
-| **Render** (Frontend) | Create a **Static Site**, point it to the `frontend` folder. | Ensure frontend uses the dynamic Render backend URL. |
+```bash
+git clone https://github.com/nehalikareddy/Nexus-VideoCall.git
+cd Nexus-VideoCall
+```
 
+### 2️⃣ Backend Setup
+
+```bash
+cd server
+npm install
+npm start
+```
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd client
+npm install
+npm start
+```
+
+---
+
+## 🤝 Contributing
+
+This project explores the combination of **Real-Time Communication (RTC)** and **Artificial Intelligence**.
+
+Feel free to:
+
+* Fork the repo
+* Improve features
+* Submit pull requests 🚀
 
